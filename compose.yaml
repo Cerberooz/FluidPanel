@@ -1,0 +1,30 @@
+services:
+  panel:
+    build:
+      context: .
+      dockerfile: Dockerfile.flux
+    restart: unless-stopped
+    # Only the VPS Nginx proxy listens publicly. This avoids changing the
+    # existing panel IP and lets Nginx route both domains by hostname.
+    ports:
+      - "127.0.0.1:8080:80"
+    env_file:
+      - .env
+    volumes:
+      # Preserve the current SQLite database, uploads, sessions, logs and cache.
+      - ./database:/var/www/html/database
+      - ./storage:/var/www/html/storage
+      - ./bootstrap/cache:/var/www/html/bootstrap/cache
+
+  status:
+    build:
+      context: ./Flux Status/Flux Status
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8081:5000"
+    env_file:
+      - ./Flux Status/Flux Status/.env
+    environment:
+      PANEL_URL: http://panel
+    depends_on:
+      - panel

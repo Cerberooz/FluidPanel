@@ -1,0 +1,12 @@
+.git
+.github
+.env
+.env.*
+!.env.example
+vendor
+node_modules
+storage
+database/*.sqlite
+database/*.sqlite3
+Flux Status/.env
+Flux Status/**/__pycache__
