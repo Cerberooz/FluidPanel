@@ -13,7 +13,6 @@ import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import Tooltip from '@/components/elements/tooltip/Tooltip';
 import Avatar from '@/components/Avatar';
 import { usePersistedState } from '@/plugins/usePersistedState';
-import logo from '@/assets/images/flux_logo.jpg';
 
 const NavigationGroup = styled.div`
     & > a,
@@ -105,7 +104,7 @@ export default () => {
                             }`}
                         >
                             <img
-                                src={logo}
+                                src={'/favicons/flux_logo.jpg'}
                                 alt={'Fluid'}
                                 className={'h-10 w-10 shrink-0 rounded-xl border border-neutral-600 object-cover'}
                             />

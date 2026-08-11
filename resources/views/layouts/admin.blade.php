@@ -40,11 +40,11 @@
             <header class="main-header">
                 <a href="{{ route('index') }}" class="logo">
                     <span class="logo-lg">
-                        <img src="/favicons/flux_logo.jpg" alt="Fluid" style="height:24px;width:24px;object-fit:cover;border-radius:6px;margin-right:8px;">
+                        <img class="fluid-brand-logo" src="/favicons/flux_logo.jpg" alt="Fluid">
                         {{ config('app.name', 'Fluid') }}
                     </span>
                     <span class="logo-mini">
-                        <img src="/favicons/flux_logo.jpg" alt="Fluid" style="height:24px;width:24px;object-fit:cover;border-radius:6px;">
+                        <img class="fluid-brand-logo" src="/favicons/flux_logo.jpg" alt="Fluid">
                     </span>
                 </a>
                 <nav class="navbar navbar-static-top">

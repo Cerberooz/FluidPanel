@@ -4,7 +4,6 @@ import styled from 'styled-components/macro';
 import { breakpoint } from '@/theme';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import tw from 'twin.macro';
-import logo from '@/assets/images/flux_logo.jpg';
 
 type Props = React.DetailedHTMLProps<React.FormHTMLAttributes<HTMLFormElement>, HTMLFormElement> & {
     title?: string;
@@ -36,7 +35,7 @@ export default forwardRef<HTMLFormElement, Props>(({ title, subtitle = 'Sign in 
     <Container>
         <div css={tw`text-center mb-6`}>
             <img
-                src={logo}
+                src={'/favicons/flux_logo.jpg'}
                 alt={'Fluid'}
                 css={tw`inline-block h-14 w-14 rounded-xl object-cover border border-neutral-600 mb-4`}
             />
