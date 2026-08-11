@@ -75,9 +75,15 @@
                     <div class="node-card">
                         <div class="node-card-header">
                             <div class="node-info">
-                                <div class="node-title">
-                                    <span class="location-flag" aria-hidden="true">{{ node.flag }}</span>
-                                    <h3>{{ node.name }} <span class="node-location">— {{ node.location_name }}</span></h3>
+                            <div class="node-title">
+                                <span class="location-flag">
+                                    {% if node.flag_url %}
+                                    <img src="{{ node.flag_url }}" alt="{{ node.location_name }} flag" loading="lazy">
+                                    {% else %}
+                                    <span aria-hidden="true">🌐</span>
+                                    {% endif %}
+                                </span>
+                                <h3>{{ node.name }} <span class="node-location">- {{ node.location_name }}</span></h3>
                                 </div>
                                 <p class="node-meta">{{ 'Public' if node.public else 'Private' }}</p>
                             </div>
@@ -87,24 +93,25 @@
                         </div>
 
                         <div class="mini-capacity" aria-label="Node capacity">
-                            {% for label, resource in [('RAM', node.memory), ('Disk', node.disk)] %}
                             <div class="capacity-row">
                                 <div class="capacity-label">
-                                    <span>{{ label }}</span>
-                                    {% if resource.known %}
-                                    <strong>{{ '%.2f'|format(resource.free_percent) }}% free</strong>
+                                    <span>Availability</span>
+                                    {% if node.memory.known %}
+                                    <strong>{{ '%.2f'|format(node.memory.free_percent) }}% free</strong>
                                     {% else %}
                                     <strong>Unavailable</strong>
                                     {% endif %}
                                 </div>
-                                <div class="mini-bar" aria-hidden="true">
-                                    <span class="mini-bar-fill {{ 'capacity-low' if resource.free_percent < 20 else 'capacity-medium' if resource.free_percent < 40 else '' }}" style="width: {{ resource.free_percent }}%"></span>
+                                <div class="capacity-ticks {{ 'capacity-low' if node.memory.free_percent < 20 else 'capacity-medium' if node.memory.free_percent < 40 else '' }}" aria-hidden="true">
+                                    {% set filled_ticks = ((node.memory.free_percent / 100) * 24)|round(0, 'floor')|int %}
+                                    {% for tick in range(24) %}
+                                    <span class="capacity-tick{% if tick < filled_ticks %} is-filled{% endif %}"></span>
+                                    {% endfor %}
                                 </div>
-                                {% if resource.known %}
-                                <p>{{ '{:,.0f}'.format(resource.used) }} / {{ '{:,.0f}'.format(resource.total) }} MB used</p>
+                                {% if node.memory.known %}
+                                <p>{{ '{:,.0f}'.format(node.memory.used) }} / {{ '{:,.0f}'.format(node.memory.total) }} MB used</p>
                                 {% endif %}
                             </div>
-                            {% endfor %}
                         </div>
                     </div>
                     {% endfor %}

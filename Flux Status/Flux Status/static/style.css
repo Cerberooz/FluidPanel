@@ -174,9 +174,21 @@ body {
 }
 
 .location-flag {
+    align-items: center;
+    background: rgba(59, 130, 246, 0.08);
+    border: 1px solid rgba(59, 130, 246, 0.16);
+    border-radius: 7px;
+    display: inline-flex;
+    flex: 0 0 25px;
     font-size: 1.25rem;
+    height: 18px;
+    justify-content: center;
     line-height: 1;
+    overflow: hidden;
+    width: 25px;
 }
+
+.location-flag img { display: block; height: 100%; object-fit: cover; width: 100%; }
 
 .node-info h3 {
     font-size: 1.1rem;
@@ -394,22 +406,21 @@ footer {
     text-transform: none;
 }
 
-.mini-bar {
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 999px;
-    height: 5px;
-    overflow: hidden;
+.capacity-ticks {
+    display: flex;
+    gap: 3px;
+    height: 22px;
 }
 
-.mini-bar-fill {
-    background: var(--bar-up);
-    border-radius: inherit;
-    display: block;
-    height: 100%;
+.capacity-tick {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    flex: 1;
 }
 
-.mini-bar-fill.capacity-medium { background: var(--bar-degraded); }
-.mini-bar-fill.capacity-low { background: var(--bar-down); }
+.capacity-tick.is-filled { background: var(--bar-up); }
+.capacity-ticks.capacity-medium .capacity-tick.is-filled { background: var(--bar-degraded); }
+.capacity-ticks.capacity-low .capacity-tick.is-filled { background: var(--bar-down); }
 
 .capacity-row p {
     color: var(--text-muted);

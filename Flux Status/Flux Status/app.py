@@ -17,33 +17,33 @@ REGION_ORDER = ["Europe", "Asia", "North America", "Oceania", "South America", "
 # common location short codes. Add an entry when a new country is added.
 LOCATION_REGIONS = {
     "Europe": (
-        ("🇩🇪", ("germany", "frankfurt", "de-", "de_", "deu")),
-        ("🇫🇷", ("france", "paris", "fr-", "fr_", "fra")),
-        ("🇳🇱", ("netherlands", "amsterdam", "nl-", "nl_", "nld")),
-        ("🇬🇧", ("united kingdom", "uk", "london", "england", "gb-", "gb_")),
-        ("🇫🇮", ("finland", "helsinki", "fi-", "fi_", "fin")),
-        ("🇸🇪", ("sweden", "stockholm", "se-", "se_", "swe")),
-        ("🇵🇱", ("poland", "warsaw", "pl-", "pl_", "pol")),
-        ("🇪🇸", ("spain", "madrid", "es-", "es_", "esp")),
-        ("🇮🇹", ("italy", "milan", "it-", "it_", "ita")),
-        ("🇨🇭", ("switzerland", "zurich", "ch-", "ch_", "che")),
-        ("🇳🇴", ("norway", "oslo", "no-", "no_", "nor")),
+        ("de", ("germany", "frankfurt", "de-", "de_", "deu")),
+        ("fr", ("france", "paris", "fr-", "fr_", "fra")),
+        ("nl", ("netherlands", "amsterdam", "nl-", "nl_", "nld")),
+        ("gb", ("united kingdom", "uk", "london", "england", "gb-", "gb_")),
+        ("fi", ("finland", "helsinki", "fi-", "fi_", "fin")),
+        ("se", ("sweden", "stockholm", "se-", "se_", "swe")),
+        ("pl", ("poland", "warsaw", "pl-", "pl_", "pol")),
+        ("es", ("spain", "madrid", "es-", "es_", "esp")),
+        ("it", ("italy", "milan", "it-", "it_", "ita")),
+        ("ch", ("switzerland", "zurich", "ch-", "ch_", "che")),
+        ("no", ("norway", "oslo", "no-", "no_", "nor")),
     ),
     "Asia": (
-        ("🇸🇬", ("singapore", "sg-", "sg_", "sgp")),
-        ("🇯🇵", ("japan", "tokyo", "osaka", "jp-", "jp_", "jpn")),
-        ("🇭🇰", ("hong kong", "hk-", "hk_", "hkg")),
-        ("🇮🇳", ("india", "mumbai", "delhi", "in-", "in_", "ind")),
-        ("🇰🇷", ("korea", "seoul", "kr-", "kr_", "kor")),
-        ("🇮🇩", ("indonesia", "jakarta", "id-", "id_", "idn")),
+        ("sg", ("singapore", "sg-", "sg_", "sgp")),
+        ("jp", ("japan", "tokyo", "osaka", "jp-", "jp_", "jpn")),
+        ("hk", ("hong kong", "hk-", "hk_", "hkg")),
+        ("in", ("india", "mumbai", "delhi", "in-", "in_", "ind")),
+        ("kr", ("korea", "seoul", "kr-", "kr_", "kor")),
+        ("id", ("indonesia", "jakarta", "id-", "id_", "idn")),
     ),
     "North America": (
-        ("🇺🇸", ("united states", "usa", "us-", "us_", "new york", "dallas", "miami", "los angeles", "chicago")),
-        ("🇨🇦", ("canada", "toronto", "montreal", "ca-", "ca_", "can")),
+        ("us", ("united states", "usa", "us-", "us_", "new york", "dallas", "miami", "los angeles", "chicago")),
+        ("ca", ("canada", "toronto", "montreal", "ca-", "ca_", "can")),
     ),
-    "Oceania": (("🇦🇺", ("australia", "sydney", "melbourne", "au-", "au_", "aus")),),
-    "South America": (("🇧🇷", ("brazil", "sao paulo", "são paulo", "br-", "br_", "bra")),),
-    "Africa": (("🇿🇦", ("south africa", "johannesburg", "cape town", "za-", "za_", "zaf")),),
+    "Oceania": (("au", ("australia", "sydney", "melbourne", "au-", "au_", "aus")),),
+    "South America": (("br", ("brazil", "sao paulo", "são paulo", "br-", "br_", "bra")),),
+    "Africa": (("za", ("south africa", "johannesburg", "cape town", "za-", "za_", "zaf")),),
 }
 
 
@@ -66,13 +66,18 @@ def fetch_resource(path):
         return None
 
 def location_region(location_name: str):
-    """Return a display region and flag from a panel location name/code."""
+    """Return a display region and ISO country code from a panel location."""
     value = location_name.casefold()
     for region, countries in LOCATION_REGIONS.items():
-        for flag, aliases in countries:
+        for country_code, aliases in countries:
             if any(alias in value for alias in aliases):
-                return region, flag
-    return "Other", "🌐"
+                return region, country_code
+    return "Other", ""
+
+
+def display_location(location_name: str) -> str:
+    """Use the customer-facing location format: Country, City."""
+    return location_name.replace(" - ", ", ").replace(" — ", ", ")
 
 
 def capacity(total, used):
@@ -100,7 +105,8 @@ def process_nodes(nodes_raw, locations):
         maintenance = attrs.get("maintenance_mode", False)
         location = locations.get(attrs.get("location_id"), {})
         location_name = location.get("long") or location.get("short") or f"Location {attrs.get('location_id', 'N/A')}"
-        region, flag = location_region(location_name)
+        location_name = display_location(location_name)
+        region, country_code = location_region(location_name)
         allocated = attrs.get("allocated_resources") or {}
         # "Active" if NOT in maintenance, else "Offline"
         status = "offline" if maintenance else "active"
@@ -111,9 +117,8 @@ def process_nodes(nodes_raw, locations):
             "location_id": attrs.get("location_id", "N/A"),
             "location_name": location_name,
             "region": region,
-            "flag": flag,
+            "flag_url": f"https://flagcdn.com/w40/{country_code}.png" if country_code else "",
             "memory": capacity(attrs.get("memory"), allocated.get("memory")),
-            "disk": capacity(attrs.get("disk"), allocated.get("disk")),
             "public": attrs.get("public", True),
             "created_at": attrs.get("created_at", ""),
             "status": status,
