@@ -115,23 +115,45 @@ body {
     font-weight: 400;
 }
 
+/* NODE REGIONS */
+.node-regions {
+    margin-bottom: 3.5rem;
+}
+
+.region-group + .region-group {
+    margin-top: 2rem;
+}
+
+.region-title {
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    margin: 0 0 0.7rem;
+    text-transform: uppercase;
+}
+
 /* NODES GRID */
 .nodes-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 1rem;
-    margin-bottom: 3.5rem;
+    margin-bottom: 0;
 }
 
 .node-card {
     background-color: var(--card-bg);
     border-radius: 14px;
     padding: 1.25rem 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     border: 1px solid var(--border-color);
     transition: border-color 0.2s, transform 0.2s;
+}
+
+.node-card-header {
+    align-items: center;
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
 }
 
 .node-card:hover {
@@ -151,10 +173,21 @@ body {
     flex-shrink: 0;
 }
 
+.location-flag {
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
 .node-info h3 {
     font-size: 1.1rem;
     font-weight: 600;
     color: var(--text-main);
+}
+
+.node-location {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 500;
 }
 
 .node-meta {
@@ -333,4 +366,53 @@ footer {
     margin-top: 4rem;
     color: var(--text-muted);
     font-size: 0.8rem;
+}
+
+.mini-capacity {
+    border-top: 1px solid var(--border-color);
+    display: grid;
+    gap: 0.85rem;
+    margin-top: 1rem;
+    padding-top: 0.95rem;
+}
+
+.capacity-label {
+    align-items: center;
+    color: var(--text-muted);
+    display: flex;
+    font-size: 0.74rem;
+    font-weight: 600;
+    justify-content: space-between;
+    margin-bottom: 0.38rem;
+    text-transform: uppercase;
+}
+
+.capacity-label strong {
+    color: var(--text-main);
+    font-size: 0.76rem;
+    font-weight: 600;
+    text-transform: none;
+}
+
+.mini-bar {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    height: 5px;
+    overflow: hidden;
+}
+
+.mini-bar-fill {
+    background: var(--bar-up);
+    border-radius: inherit;
+    display: block;
+    height: 100%;
+}
+
+.mini-bar-fill.capacity-medium { background: var(--bar-degraded); }
+.mini-bar-fill.capacity-low { background: var(--bar-down); }
+
+.capacity-row p {
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    margin-top: 0.3rem;
 }

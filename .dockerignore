@@ -8,5 +8,6 @@ node_modules
 storage
 database/*.sqlite
 database/*.sqlite3
+bootstrap/cache/*.php
 Flux Status/.env
 Flux Status/**/__pycache__

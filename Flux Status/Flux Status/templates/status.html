@@ -66,71 +66,47 @@
 
         <!-- NODES GRID -->
         {% if not error and nodes %}
-        <section class="nodes-grid">
-            {% for node in nodes %}
-            <div class="node-card">
-                <div class="node-info">
-                    <div class="node-title">
-                        <!-- Server Icon -->
-                        <svg class="node-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
-                            <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
-                            <line x1="6" y1="6" x2="6.01" y2="6"></line>
-                            <line x1="6" y1="18" x2="6.01" y2="18"></line>
-                        </svg>
-                        <h3>{{ node.name }}</h3>
+        <section class="node-regions" aria-label="Node status by region">
+            {% for group in node_groups %}
+            <div class="region-group">
+                <h2 class="region-title">{{ group.name }}</h2>
+                <div class="nodes-grid">
+                    {% for node in group.nodes %}
+                    <div class="node-card">
+                        <div class="node-card-header">
+                            <div class="node-info">
+                                <div class="node-title">
+                                    <span class="location-flag" aria-hidden="true">{{ node.flag }}</span>
+                                    <h3>{{ node.name }} <span class="node-location">— {{ node.location_name }}</span></h3>
+                                </div>
+                                <p class="node-meta">{{ 'Public' if node.public else 'Private' }}</p>
+                            </div>
+                            <div class="badge {{ 'badge-operational' if node.status == 'active' else 'badge-offline' }}">
+                                {{ 'OPERATIONAL' if node.status == 'active' else 'MAINTENANCE' }}
+                            </div>
+                        </div>
+
+                        <div class="mini-capacity" aria-label="Node capacity">
+                            {% for label, resource in [('RAM', node.memory), ('Disk', node.disk)] %}
+                            <div class="capacity-row">
+                                <div class="capacity-label">
+                                    <span>{{ label }}</span>
+                                    {% if resource.known %}
+                                    <strong>{{ '%.2f'|format(resource.free_percent) }}% free</strong>
+                                    {% else %}
+                                    <strong>Unavailable</strong>
+                                    {% endif %}
+                                </div>
+                                <div class="mini-bar" aria-hidden="true">
+                                    <span class="mini-bar-fill {{ 'capacity-low' if resource.free_percent < 20 else 'capacity-medium' if resource.free_percent < 40 else '' }}" style="width: {{ resource.free_percent }}%"></span>
+                                </div>
+                                {% if resource.known %}
+                                <p>{{ '{:,.0f}'.format(resource.used) }} / {{ '{:,.0f}'.format(resource.total) }} MB used</p>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
                     </div>
-                    <p class="node-meta">ID: {{ node.id }} &bull; Loc: {{ node.location_id }} &bull; {{ 'Public' if node.public else 'Private' }}</p>
-                </div>
-                <div class="badge {{ 'badge-operational' if node.status == 'active' else 'badge-offline' }}">
-                    {{ 'OPERATIONAL' if node.status == 'active' else 'MAINTENANCE' }}
-                </div>
-            </div>
-            {% endfor %}
-        </section>
-
-        <!-- AVAILABILITY BARS -->
-        <section class="availability-section">
-            <div class="section-header">
-                <h2>Availability per Component</h2>
-                <div class="legend">
-                    <span class="legend-item"><span class="dot up"></span> UP</span>
-                    <span class="legend-item"><span class="dot degraded"></span> DEGRADED</span>
-                    <span class="legend-item"><span class="dot down"></span> DOWN</span>
-                    <span class="legend-item"><span class="dot maintenance"></span> MAINTENANCE</span>
-                </div>
-            </div>
-
-            {% for node in nodes %}
-            <div class="component-card">
-                <div class="component-header">
-                    <h2>{{ node.name }}</h2>
-                    <svg class="share-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="18" cy="5" r="3"></circle>
-                        <circle cx="6" cy="12" r="3"></circle>
-                        <circle cx="18" cy="19" r="3"></circle>
-                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-                    </svg>
-                </div>
-                
-                <div class="component-meta">
-                    <div class="days-pill">60 Days</div>
-                    <div class="uptime-stats">
-                        <span class="percent">{{ '100.0000%' if node.status == 'active' else '0.0000%' }}</span>
-                        <span class="status-text {{ 'text-up' if node.status == 'active' else 'text-down' }}">
-                            {{ 'Status OK' if node.status == 'active' else 'Offline' }}
-                        </span>
-                    </div>
-                </div>
-
-                <div class="uptime-bars">
-                    {% for i in range(60) %}
-                        {% if node.status == 'active' %}
-                            <div class="bar up" title="100% Operational"></div>
-                        {% else %}
-                            <div class="bar down" title="Node Unreachable"></div>
-                        {% endif %}
                     {% endfor %}
                 </div>
             </div>

@@ -45,7 +45,7 @@ long random passwords; retain the existing `APP_KEY`, `APP_URL`, mail settings,
 and all other existing settings.
 
 ```dotenv
-DB_CONNECTION=mariadb
+DB_CONNECTION=mysql
 DB_HOST=database
 DB_PORT=3306
 DB_DATABASE=panel
