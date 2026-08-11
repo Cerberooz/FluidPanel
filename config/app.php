@@ -23,7 +23,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Pterodactyl'),
+    'name' => env('APP_NAME', 'Fluid'),
 
     /*
     |--------------------------------------------------------------------------
@@ -63,6 +63,19 @@ return [
     */
 
     'url' => env('APP_URL', 'http://localhost'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Force HTTPS URL Generation
+    |--------------------------------------------------------------------------
+    |
+    | When enabled, generated application URLs will always use HTTPS. Keep this
+    | disabled for plain HTTP installs so admin redirects and form actions follow
+    | the current request scheme.
+    |
+    */
+
+    'force_https' => env('APP_FORCE_HTTPS', false),
 
     /*
     |--------------------------------------------------------------------------

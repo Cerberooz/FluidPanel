@@ -3,7 +3,6 @@
 namespace Pterodactyl\Providers;
 
 use Pterodactyl\Models;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
@@ -27,12 +26,7 @@ class AppServiceProvider extends ServiceProvider
 
         Paginator::useBootstrap();
 
-        // If the APP_URL value is set with https:// make sure we force it here. Theoretically
-        // this should just work with the proxy logic, but there are a lot of cases where it
-        // doesn't, and it triggers a lot of support requests, so lets just head it off here.
-        //
-        // @see https://github.com/pterodactyl/panel/issues/3623
-        if (Str::startsWith(config('app.url') ?? '', 'https://')) {
+        if (config('app.force_https', false)) {
             URL::forceScheme('https');
         }
 

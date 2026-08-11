@@ -7,6 +7,7 @@ import tw from 'twin.macro';
 
 type Props = React.DetailedHTMLProps<React.FormHTMLAttributes<HTMLFormElement>, HTMLFormElement> & {
     title?: string;
+    subtitle?: string;
 };
 
 const Container = styled.div`
@@ -30,14 +31,16 @@ const Container = styled.div`
     `};
 `;
 
-export default forwardRef<HTMLFormElement, Props>(({ title, ...props }, ref) => (
+export default forwardRef<HTMLFormElement, Props>(({ title, subtitle = 'Sign in to manage your servers.', ...props }, ref) => (
     <Container>
         <div css={tw`text-center mb-6`}>
-            <div css={tw`inline-flex h-12 w-12 items-center justify-center rounded-xl bg-neutral-800 border border-neutral-600 text-cyan-300 text-xl font-semibold mb-4`}>
-                F
-            </div>
+            <img
+                src={'/favicons/flux_logo.jpg'}
+                alt={'Fluid'}
+                css={tw`inline-block h-14 w-14 rounded-xl object-cover border border-neutral-600 mb-4`}
+            />
             {title && <h2 css={tw`text-2xl text-neutral-100 font-semibold`}>{title}</h2>}
-            <p css={tw`text-sm text-neutral-400 mt-2`}>Sign in to manage your servers.</p>
+            <p css={tw`text-sm text-neutral-400 mt-2`}>{subtitle}</p>
         </div>
         <FlashMessageRender css={tw`mb-3 px-1`} />
         <Form {...props} ref={ref}>

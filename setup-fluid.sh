@@ -3,7 +3,7 @@ set -euo pipefail
 
 cd "$(dirname "$0")"
 
-APP_URL_VALUE="${APP_URL:-https://panel.fluxservers.cloud}"
+APP_URL_VALUE="${APP_URL:-http://localhost}"
 ADMIN_EMAIL="${PANEL_ADMIN_EMAIL:-}"
 ADMIN_USERNAME="${PANEL_ADMIN_USERNAME:-admin}"
 ADMIN_PASSWORD="${PANEL_ADMIN_PASSWORD:-}"
@@ -59,8 +59,10 @@ mkdir -p \
 
 set_env_value APP_ENV production
 set_env_value APP_DEBUG false
+set_env_value APP_NAME Fluid
 set_env_value APP_THEME fluid
 set_env_value APP_URL "$APP_URL_VALUE"
+set_env_value APP_FORCE_HTTPS false
 set_env_value DB_CONNECTION sqlite
 set_env_value DB_DATABASE database/database.sqlite
 set_env_value DB_FOREIGN_KEYS true

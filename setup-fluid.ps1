@@ -1,5 +1,5 @@
 param(
-    [string]$AppUrl = $(if ($env:APP_URL) { $env:APP_URL } else { "https://panel.fluxservers.cloud" }),
+    [string]$AppUrl = $(if ($env:APP_URL) { $env:APP_URL } else { "http://localhost" }),
     [string]$AdminEmail = $env:PANEL_ADMIN_EMAIL,
     [string]$AdminUsername = $(if ($env:PANEL_ADMIN_USERNAME) { $env:PANEL_ADMIN_USERNAME } else { "admin" }),
     [string]$AdminPassword = $env:PANEL_ADMIN_PASSWORD
@@ -70,8 +70,10 @@ if (-not (Test-Path -LiteralPath "database/database.sqlite")) {
 
 Set-EnvValue "APP_ENV" "production"
 Set-EnvValue "APP_DEBUG" "false"
+Set-EnvValue "APP_NAME" "Fluid"
 Set-EnvValue "APP_THEME" "fluid"
 Set-EnvValue "APP_URL" $AppUrl
+Set-EnvValue "APP_FORCE_HTTPS" "false"
 Set-EnvValue "DB_CONNECTION" "sqlite"
 Set-EnvValue "DB_DATABASE" "database/database.sqlite"
 Set-EnvValue "DB_FOREIGN_KEYS" "true"
