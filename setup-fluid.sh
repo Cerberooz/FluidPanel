@@ -48,6 +48,15 @@ fi
 mkdir -p database
 touch database/database.sqlite
 
+# These directories are ignored by git but are required by Laravel and the
+# frontend build on a fresh checkout.
+mkdir -p \
+    bootstrap/cache \
+    storage/framework/cache/data \
+    storage/framework/sessions \
+    storage/framework/views \
+    public/assets
+
 set_env_value APP_ENV production
 set_env_value APP_DEBUG false
 set_env_value APP_THEME fluid

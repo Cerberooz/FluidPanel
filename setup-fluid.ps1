@@ -54,6 +54,20 @@ if (-not (Test-Path -LiteralPath "database/database.sqlite")) {
     New-Item -ItemType File -Path "database/database.sqlite" | Out-Null
 }
 
+# These directories are ignored by git but are required by Laravel and the
+# frontend build on a fresh checkout.
+@(
+    "bootstrap/cache",
+    "storage/framework/cache/data",
+    "storage/framework/sessions",
+    "storage/framework/views",
+    "public/assets"
+) | ForEach-Object {
+    if (-not (Test-Path -LiteralPath $_)) {
+        New-Item -ItemType Directory -Path $_ -Force | Out-Null
+    }
+}
+
 Set-EnvValue "APP_ENV" "production"
 Set-EnvValue "APP_DEBUG" "false"
 Set-EnvValue "APP_THEME" "fluid"
