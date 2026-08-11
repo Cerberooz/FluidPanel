@@ -65,7 +65,7 @@ export default () => {
     return (
         <div key={'server-router'} className={'min-h-screen bg-neutral-900 lg:flex'}>
             <NavigationBar />
-            <div className={'min-w-0 flex-1 pt-16 lg:pt-0'}>
+            <div className={'min-w-0 flex-1 pt-16 lg:pt-0 lg:min-h-screen'}>
                 {!uuid || !id ? (
                     error ? (
                         <ServerError message={error} />

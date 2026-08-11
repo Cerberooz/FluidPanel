@@ -13,6 +13,7 @@ import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import Tooltip from '@/components/elements/tooltip/Tooltip';
 import Avatar from '@/components/Avatar';
 import { usePersistedState } from '@/plugins/usePersistedState';
+import logo from '@/assets/images/flux_logo.jpg';
 
 const NavigationGroup = styled.div`
     & > a,
@@ -44,6 +45,17 @@ const SidebarButton = styled.button`
 
     &:hover {
         ${tw`bg-neutral-800 text-neutral-100`};
+    }
+`;
+
+const SidebarShell = styled.aside<{ $collapsed: boolean; $mobileOpen: boolean }>`
+    ${tw`fixed inset-y-0 left-0 z-40 flex border-r border-neutral-600 bg-neutral-900 shadow-2xl backdrop-blur lg:translate-x-0`};
+    width: ${({ $collapsed }) => ($collapsed ? '5rem' : '18rem')};
+    transform: translateX(${({ $mobileOpen }) => ($mobileOpen ? '0' : '-100%')});
+    transition: width 200ms ease, transform 200ms ease;
+
+    @media (min-width: 1024px) {
+        transform: translateX(0);
     }
 `;
 
@@ -82,11 +94,7 @@ export default () => {
                     className={'fixed inset-0 z-30 bg-black/50 lg:hidden'}
                 />
             )}
-            <aside
-                className={`fixed inset-y-0 left-0 z-40 flex border-r border-neutral-600 bg-neutral-900/95 shadow-2xl backdrop-blur transition-all duration-300 ${
-                    mobileOpen ? 'translate-x-0 w-72' : '-translate-x-full w-72'
-                } ${navCollapsed ? 'lg:w-20' : 'lg:w-72'} lg:translate-x-0`}
-            >
+            <SidebarShell $collapsed={navCollapsed} $mobileOpen={mobileOpen}>
                 <div className={'flex w-full flex-col p-4'}>
                     <div className={'flex items-center justify-between'}>
                         <Link
@@ -97,7 +105,7 @@ export default () => {
                             }`}
                         >
                             <img
-                                src={'/favicons/flux_logo.jpg'}
+                                src={logo}
                                 alt={'Fluid'}
                                 className={'h-10 w-10 shrink-0 rounded-xl border border-neutral-600 object-cover'}
                             />
@@ -155,7 +163,7 @@ export default () => {
                         </NavigationGroup>
                     </div>
                 </div>
-            </aside>
+            </SidebarShell>
             <div className={`hidden shrink-0 transition-all duration-300 lg:block ${navCollapsed ? 'w-20' : 'w-72'}`} />
         </>
     );

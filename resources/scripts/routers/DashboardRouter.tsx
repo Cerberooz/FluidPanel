@@ -15,7 +15,7 @@ export default () => {
     return (
         <div className={'min-h-screen bg-neutral-900 lg:flex'}>
             <NavigationBar />
-            <div className={'min-w-0 flex-1 pt-16 lg:pt-0'}>
+            <div className={'min-w-0 flex-1 pt-16 lg:pt-0 lg:min-h-screen'}>
                 {location.pathname.startsWith('/account') && (
                     <SubNavigation>
                         <div>
