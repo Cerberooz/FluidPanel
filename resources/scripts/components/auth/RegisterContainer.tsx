@@ -91,23 +91,24 @@ const RegisterContainer = () => {
                     subtitle={'Register to start managing your servers.'}
                     css={tw`w-full flex`}
                 >
-                    <Field light type={'email'} label={'Email'} name={'email'} disabled={isSubmitting} />
+                    <Field type={'email'} label={'Email'} name={'email'} placeholder={'you@example.com'} autoComplete={'email'} disabled={isSubmitting} />
                     <div css={tw`mt-6`}>
-                        <Field light type={'text'} label={'Username'} name={'username'} disabled={isSubmitting} />
+                        <Field type={'text'} label={'Username'} name={'username'} placeholder={'Choose a username'} autoComplete={'username'} disabled={isSubmitting} />
                     </div>
                     <div css={tw`grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6`}>
-                        <Field light type={'text'} label={'First Name'} name={'nameFirst'} disabled={isSubmitting} />
-                        <Field light type={'text'} label={'Last Name'} name={'nameLast'} disabled={isSubmitting} />
+                        <Field type={'text'} label={'First Name'} name={'nameFirst'} placeholder={'First name'} autoComplete={'given-name'} disabled={isSubmitting} />
+                        <Field type={'text'} label={'Last Name'} name={'nameLast'} placeholder={'Last name'} autoComplete={'family-name'} disabled={isSubmitting} />
                     </div>
                     <div css={tw`mt-6`}>
-                        <Field light type={'password'} label={'Password'} name={'password'} disabled={isSubmitting} />
+                        <Field type={'password'} label={'Password'} name={'password'} placeholder={'At least 8 characters'} autoComplete={'new-password'} disabled={isSubmitting} />
                     </div>
                     <div css={tw`mt-6`}>
                         <Field
-                            light
                             type={'password'}
                             label={'Confirm Password'}
                             name={'passwordConfirmation'}
+                            placeholder={'Repeat your password'}
+                            autoComplete={'new-password'}
                             disabled={isSubmitting}
                         />
                     </div>

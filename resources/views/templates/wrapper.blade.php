@@ -3,6 +3,10 @@
     <head>
         <title>{{ config('app.name', 'Fluid') }}</title>
 
+        <style>
+            html, body { min-height: 100%; background: #0b0d12; }
+        </style>
+
         @section('meta')
             <meta charset="utf-8">
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -35,7 +39,7 @@
 
         @include('layouts.scripts')
     </head>
-    <body class="{{ $css['body'] ?? 'bg-neutral-50' }}">
+    <body class="{{ $css['body'] ?? 'bg-neutral-900' }}">
         @section('content')
             @yield('above-container')
             @yield('container')
