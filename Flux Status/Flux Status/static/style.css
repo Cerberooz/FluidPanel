@@ -409,7 +409,7 @@ footer {
 .capacity-ticks {
     display: flex;
     gap: 2px;
-    height: 14px;
+    height: 46px;
 }
 
 .capacity-tick {
