@@ -407,15 +407,16 @@ footer {
 }
 
 .capacity-ticks {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(60, minmax(0, 1fr));
     gap: 2px;
     height: 46px;
 }
 
 .capacity-tick {
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 2px;
-    flex: 1;
+    border-radius: 0;
+    min-width: 0;
 }
 
 .capacity-tick.is-filled { background: var(--bar-up); }
