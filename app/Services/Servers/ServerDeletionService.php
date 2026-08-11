@@ -4,6 +4,7 @@ namespace Pterodactyl\Services\Servers;
 
 use Illuminate\Http\Response;
 use Pterodactyl\Models\Server;
+use Pterodactyl\Services\Subdomains\SubdomainDnsService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\ConnectionInterface;
 use Pterodactyl\Repositories\Wings\DaemonServerRepository;
@@ -21,6 +22,7 @@ class ServerDeletionService
         private ConnectionInterface $connection,
         private DaemonServerRepository $daemonServerRepository,
         private DatabaseManagementService $databaseManagementService,
+        private SubdomainDnsService $subdomainDnsService,
     ) {
     }
 
@@ -42,6 +44,14 @@ class ServerDeletionService
      */
     public function handle(Server $server): void
     {
+        foreach ($server->subdomains()->with('domain')->get() as $subdomain) {
+            try {
+                $this->subdomainDnsService->delete($subdomain);
+            } catch (\Throwable $exception) {
+                if (!$this->force) throw $exception;
+                Log::warning($exception);
+            }
+        }
         try {
             $this->daemonServerRepository->setServer($server)->delete();
         } catch (DaemonConnectionException $exception) {

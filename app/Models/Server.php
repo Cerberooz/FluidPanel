@@ -273,6 +273,11 @@ class Server extends Model implements Identifiable
         return $this->hasMany(Allocation::class, 'server_id');
     }
 
+    public function subdomains(): HasMany
+    {
+        return $this->hasMany(ServerSubdomain::class);
+    }
+
     /**
      * Gets information for the nest associated with this server.
      *

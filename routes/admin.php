@@ -5,6 +5,13 @@ use Pterodactyl\Http\Controllers\Admin;
 use Pterodactyl\Http\Middleware\Admin\Servers\ServerInstalled;
 
 Route::get('/', [Admin\BaseController::class, 'index'])->name('admin.index');
+Route::prefix('subdomains')->group(function () {
+    Route::get('/', [Admin\SubdomainManagerController::class, 'index'])->name('admin.subdomains');
+    Route::post('/settings', [Admin\SubdomainManagerController::class, 'saveSettings'])->name('admin.subdomains.settings');
+    Route::post('/test', [Admin\SubdomainManagerController::class, 'test'])->name('admin.subdomains.test');
+    Route::post('/domains', [Admin\SubdomainManagerController::class, 'storeDomain'])->name('admin.subdomains.domains.store');
+    Route::post('/domains/{domain}/toggle', [Admin\SubdomainManagerController::class, 'toggleDomain'])->name('admin.subdomains.domains.toggle');
+});
 
 /*
 |--------------------------------------------------------------------------

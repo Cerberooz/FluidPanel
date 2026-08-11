@@ -4,6 +4,7 @@ namespace Pterodactyl\Observers;
 
 use Pterodactyl\Events;
 use Pterodactyl\Models\Server;
+use Pterodactyl\Jobs\Subdomains\SyncServerSubdomainJob;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 
 class ServerObserver
@@ -72,5 +73,8 @@ class ServerObserver
     public function updated(Server $server): void
     {
         event(new Events\Server\Updated($server));
+        if ($server->wasChanged(['allocation_id', 'node_id'])) {
+            $server->subdomains()->each(fn ($subdomain) => SyncServerSubdomainJob::dispatch($subdomain));
+        }
     }
 }

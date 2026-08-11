@@ -24,6 +24,8 @@ import Can from '@/components/elements/Can';
 import Tooltip from '@/components/elements/tooltip/Tooltip';
 import routes from '@/routers/routes';
 import { usePersistedState } from '@/plugins/usePersistedState';
+import { useStoreState } from 'easy-peasy';
+import { ApplicationStore } from '@/state';
 
 type Props = {
     baseUrl: string;
@@ -41,11 +43,13 @@ const icons: Record<string, IconDefinition> = {
     Backups: faArchive,
     Network: faNetworkWired,
     Startup: faRocket,
+    Subdomains: faNetworkWired,
     Settings: faCog,
     Activity: faHistory,
 };
 
 export default ({ baseUrl, serverName, serverId, rootAdmin }: Props) => {
+    const panelName = useStoreState((state: ApplicationStore) => state.settings.data!.name);
     const [collapsed, setCollapsed] = usePersistedState('layout:server-sidebar:collapsed', false);
     const [mobileOpen, setMobileOpen] = useState(false);
     const isCollapsed = !!collapsed;
@@ -77,13 +81,20 @@ export default ({ baseUrl, serverName, serverId, rootAdmin }: Props) => {
                 <div className={'flex w-full min-w-0 flex-col p-4'}>
                     <div className={`flex min-w-0 items-center ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
                         {!isCollapsed && (
-                            <Link
-                                to={'/'}
-                                className={'min-w-0 truncate text-lg font-header font-semibold text-neutral-100 no-underline hover:text-white'}
-                                title={'Back to dashboard'}
-                            >
-                                {serverName}
-                            </Link>
+                            <div className={'min-w-0'}>
+                                <Link
+                                    to={'/'}
+                                    className={'inline-flex items-center gap-3 text-xl font-header font-semibold text-neutral-100 no-underline hover:text-white'}
+                                    title={'Back to dashboard'}
+                                >
+                                    <img
+                                        src={'/favicons/flux_logo.jpg'}
+                                        alt={panelName}
+                                        className={'h-10 w-10 shrink-0 rounded-xl border border-neutral-600 object-cover'}
+                                    />
+                                    <span className={'truncate'}>{panelName}</span>
+                                </Link>
+                            </div>
                         )}
                         <button
                             type={'button'}
@@ -103,7 +114,9 @@ export default ({ baseUrl, serverName, serverId, rootAdmin }: Props) => {
                         </button>
                     </div>
 
-                    <nav className={'mt-6 flex flex-col gap-2'} aria-label={'Server management'}>
+                    {!isCollapsed && <p className={'mt-6 truncate px-3 text-sm font-semibold text-neutral-400'}>{serverName}</p>}
+
+                    <nav className={'mt-3 flex flex-col gap-2'} aria-label={'Server management'}>
                         <Tooltip placement={isCollapsed ? 'right' : 'bottom'} content={'Dashboard'}>
                             <Link
                                 to={'/'}

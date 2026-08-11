@@ -408,9 +408,11 @@ footer {
 
 .capacity-ticks {
     display: grid;
-    grid-template-columns: repeat(60, minmax(0, 1fr));
+    grid-template-columns: repeat(60, 16px);
     gap: 2px;
     height: 46px;
+    justify-content: center;
+    overflow: hidden;
 }
 
 .capacity-tick {
@@ -422,3 +424,10 @@ footer {
 .capacity-tick.is-filled { background: var(--bar-up); }
 .capacity-ticks.capacity-medium .capacity-tick.is-filled { background: var(--bar-degraded); }
 .capacity-ticks.capacity-low .capacity-tick.is-filled { background: var(--bar-down); }
+
+@media (max-width: 720px) {
+    .capacity-ticks {
+        grid-template-columns: repeat(60, minmax(0, 1fr));
+        justify-content: stretch;
+    }
+}
