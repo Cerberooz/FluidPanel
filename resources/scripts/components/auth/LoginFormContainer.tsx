@@ -1,7 +1,6 @@
 import React, { forwardRef } from 'react';
 import { Form } from 'formik';
 import styled from 'styled-components/macro';
-import { breakpoint } from '@/theme';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import tw from 'twin.macro';
 
@@ -11,28 +10,70 @@ type Props = React.DetailedHTMLProps<React.FormHTMLAttributes<HTMLFormElement>, 
 };
 
 const Container = styled.div`
-    ${tw`mx-auto px-4`};
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+    min-height: 100vh;
+    background: #0b0d12;
 
-    ${breakpoint('sm')`
-        ${tw`w-full`}
-    `};
+    @media (min-width: 768px) {
+        grid-template-columns: minmax(420px, 1.05fr) minmax(360px, 0.95fr);
+    }
+`;
 
-    ${breakpoint('md')`
-        ${tw`p-10`}
-    `};
+const FormPane = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 28px;
+    background: #111620;
 
-    ${breakpoint('lg')`
-        ${tw`w-full`}
-    `};
+    @media (min-width: 768px) {
+        padding: 64px;
+        border-right: 1px solid #252c38;
+    }
+`;
 
-    ${breakpoint('xl')`
-        ${tw`w-full`}
-        max-width: 440px;
-    `};
+const FormContent = styled.div`
+    width: 100%;
+    max-width: 520px;
+`;
+
+const BrandPane = styled.aside`
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 64px;
+    background: #080a0f;
+
+    @media (min-width: 768px) {
+        display: flex;
+    }
+`;
+
+const BrandLogo = styled.img`
+    width: min(72%, 390px);
+    height: auto;
+    border-radius: 28px;
+    object-fit: cover;
+    box-shadow: 0 28px 80px rgba(0, 0, 0, 0.35);
+`;
+
+const MobileLogo = styled.img`
+    width: 56px;
+    height: 56px;
+    margin-bottom: 24px;
+    border: 1px solid #4b5563;
+    border-radius: 14px;
+    object-fit: cover;
+
+    @media (min-width: 768px) {
+        display: none;
+    }
 `;
 
 const FormCard = styled.div`
-    ${tw`w-full bg-neutral-800 border border-neutral-600 shadow-lg rounded-xl p-6 mx-1`};
+    ${tw`w-full`};
 
     label {
         color: #cbd5e1 !important;
@@ -62,21 +103,24 @@ const FormCard = styled.div`
 
 export default forwardRef<HTMLFormElement, Props>(({ title, subtitle = 'Sign in to manage your servers.', ...props }, ref) => (
     <Container>
-        <div css={tw`text-center mb-6`}>
-            <img
-                src={'/favicons/flux_logo.jpg'}
-                alt={'Fluid'}
-                css={tw`inline-block h-14 w-14 rounded-xl object-cover border border-neutral-600 mb-4`}
-            />
-            {title && <h2 css={tw`text-2xl text-neutral-100 font-semibold`}>{title}</h2>}
-            <p css={tw`text-sm text-neutral-400 mt-2`}>{subtitle}</p>
-        </div>
-        <FlashMessageRender css={tw`mb-3 px-1`} />
-        <Form {...props} ref={ref}>
-            <FormCard>{props.children}</FormCard>
-        </Form>
-        <p css={tw`text-center text-neutral-500 text-xs mt-4`}>
-            Fluid Panel &copy; {new Date().getFullYear()}
-        </p>
+        <FormPane>
+            <FormContent>
+                <MobileLogo src={'/favicons/flux_logo.jpg'} alt={'Fluid'} />
+                <div css={tw`mb-8`}>
+                    {title && <h2 css={tw`text-3xl text-neutral-100 font-semibold`}>{title}</h2>}
+                    <p css={tw`text-base text-neutral-400 mt-2`}>{subtitle}</p>
+                </div>
+                <FlashMessageRender css={tw`mb-4`} />
+                <Form {...props} ref={ref}>
+                    <FormCard>{props.children}</FormCard>
+                </Form>
+                <p css={tw`text-neutral-500 text-xs mt-6`}>
+                    Fluid Panel &copy; {new Date().getFullYear()}
+                </p>
+            </FormContent>
+        </FormPane>
+        <BrandPane>
+            <BrandLogo src={'/favicons/flux_logo.jpg'} alt={'Fluid'} />
+        </BrandPane>
     </Container>
 ));
