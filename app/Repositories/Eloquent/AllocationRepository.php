@@ -40,14 +40,18 @@ class AllocationRepository extends EloquentRepository implements AllocationRepos
      */
     protected function getDiscardableDedicatedAllocations(array $nodes = []): array
     {
-        $query = Allocation::query()->selectRaw('CONCAT_WS("-", node_id, ip) as result');
+        $identifier = Allocation::query()->getConnection()->getDriverName() === 'sqlite'
+            ? "node_id || '-' || ip"
+            : "CONCAT_WS('-', node_id, ip)";
+
+        $query = Allocation::query()->selectRaw($identifier . ' as result');
 
         if (!empty($nodes)) {
             $query->whereIn('node_id', $nodes);
         }
 
         return $query->whereNotNull('server_id')
-            ->groupByRaw('CONCAT(node_id, ip)')
+            ->groupByRaw($identifier)
             ->get()
             ->pluck('result')
             ->toArray();
@@ -86,10 +90,13 @@ class AllocationRepository extends EloquentRepository implements AllocationRepos
         // the data and modify the query as necessary,
         if ($dedicated) {
             $discard = $this->getDiscardableDedicatedAllocations($nodes);
+            $identifier = Allocation::query()->getConnection()->getDriverName() === 'sqlite'
+                ? "node_id || '-' || ip"
+                : "CONCAT_WS('-', node_id, ip)";
 
             if (!empty($discard)) {
                 $query->whereNotIn(
-                    $this->getBuilder()->raw('CONCAT_WS("-", node_id, ip)'),
+                    $this->getBuilder()->raw($identifier),
                     $discard
                 );
             }

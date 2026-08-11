@@ -13,9 +13,9 @@ export default () => {
     const location = useLocation();
 
     return (
-        <div className={'min-h-screen bg-neutral-900 lg:flex'}>
+        <>
             <NavigationBar />
-            <div className={'min-w-0 flex-1 pt-16 lg:pt-0 lg:min-h-screen'}>
+            <div>
                 {location.pathname.startsWith('/account') && (
                     <SubNavigation>
                         <div>
@@ -47,6 +47,6 @@ export default () => {
                     </React.Suspense>
                 </TransitionRouter>
             </div>
-        </div>
+        </>
     );
 };

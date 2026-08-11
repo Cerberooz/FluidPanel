@@ -6,7 +6,7 @@ import { faAngleDoubleLeft, faBars, faCogs, faLayerGroup, faSignOutAlt, faTimes 
 import { useStoreState } from 'easy-peasy';
 import { ApplicationStore } from '@/state';
 import SearchContainer from '@/components/dashboard/search/SearchContainer';
-import tw from 'twin.macro';
+import tw, { theme } from 'twin.macro';
 import styled from 'styled-components/macro';
 import http from '@/api/http';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
@@ -58,7 +58,31 @@ const SidebarShell = styled.aside<{ $collapsed: boolean; $mobileOpen: boolean }>
     }
 `;
 
-export default () => {
+const RightNavigation = styled.div`
+    & > a,
+    & > button,
+    & > .navigation-link {
+        ${tw`flex items-center justify-center h-10 no-underline text-neutral-300 px-3 cursor-pointer transition-all duration-150 rounded-lg border border-transparent`};
+        min-width: 2.5rem;
+
+        &:active,
+        &:hover {
+            ${tw`text-neutral-100 bg-neutral-800 border-neutral-600`};
+        }
+
+        &:active,
+        &:hover,
+        &.active {
+            box-shadow: inset 0 -2px ${theme`colors.cyan.500`.toString()};
+        }
+    }
+`;
+
+type Props = {
+    sidebar?: boolean;
+};
+
+export default ({ sidebar = false }: Props) => {
     const name = useStoreState((state: ApplicationStore) => state.settings.data!.name);
     const rootAdmin = useStoreState((state: ApplicationStore) => state.user.data!.rootAdmin);
     const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -74,6 +98,58 @@ export default () => {
     };
 
     const navCollapsed = !!collapsed;
+
+    if (!sidebar) {
+        return (
+            <div className={'w-full bg-neutral-900 border-b border-neutral-600 shadow-md overflow-x-auto'}>
+                <SpinnerOverlay visible={isLoggingOut} />
+                <div className={'mx-auto w-full flex items-center h-[4.25rem] max-w-[1280px] px-4 sm:px-6'}>
+                    <div id={'logo'} className={'flex-1'}>
+                        <Link
+                            to={'/'}
+                            className={
+                                'inline-flex items-center gap-3 text-xl font-header font-semibold no-underline text-neutral-100 hover:text-white transition-colors duration-150'
+                            }
+                        >
+                            <img
+                                src={'/favicons/flux_logo.jpg'}
+                                alt={'Fluid'}
+                                className={'h-9 w-9 rounded-lg border border-neutral-600 object-cover'}
+                            />
+                            <span>{name}</span>
+                        </Link>
+                    </div>
+                    <RightNavigation className={'flex items-center justify-center gap-2'}>
+                        <SearchContainer />
+                        <Tooltip placement={'bottom'} content={'Dashboard'}>
+                            <NavLink to={'/'} exact>
+                                <FontAwesomeIcon icon={faLayerGroup} />
+                            </NavLink>
+                        </Tooltip>
+                        {rootAdmin && (
+                            <Tooltip placement={'bottom'} content={'Admin'}>
+                                <a href={'/admin'} rel={'noreferrer'}>
+                                    <FontAwesomeIcon icon={faCogs} />
+                                </a>
+                            </Tooltip>
+                        )}
+                        <Tooltip placement={'bottom'} content={'Account Settings'}>
+                            <NavLink to={'/account'}>
+                                <span className={'flex items-center w-5 h-5'}>
+                                    <Avatar.User />
+                                </span>
+                            </NavLink>
+                        </Tooltip>
+                        <Tooltip placement={'bottom'} content={'Sign Out'}>
+                            <button onClick={onTriggerLogout}>
+                                <FontAwesomeIcon icon={faSignOutAlt} />
+                            </button>
+                        </Tooltip>
+                    </RightNavigation>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <>

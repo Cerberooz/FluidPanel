@@ -155,8 +155,10 @@ body.skin-blue {
 .skin-blue .main-header .logo .logo-lg {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     height: 100%;
+    width: 100%;
+    padding-left: 16px;
 }
 
 .skin-blue .main-header .logo .logo-mini {
@@ -240,4 +242,75 @@ a:focus {
     background: #1f2937;
     border-color: #6b7280;
     color: #ffffff;
+}
+
+/* Keep AdminLTE's actions deliberately restrained and consistent with the panel. */
+.btn,
+.btn-primary,
+.btn-info,
+.btn-success,
+.btn-warning {
+    background: #1f2937;
+    border-color: #4b5563;
+    color: #f9fafb;
+    border-radius: 6px;
+    box-shadow: none;
+}
+
+.btn:hover,
+.btn:active,
+.btn:focus,
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary:focus,
+.btn-info:hover,
+.btn-info:active,
+.btn-info:focus,
+.btn-success:hover,
+.btn-success:active,
+.btn-success:focus,
+.btn-warning:hover,
+.btn-warning:active,
+.btn-warning:focus {
+    background: #374151;
+    border-color: #6b7280;
+    color: #ffffff;
+    box-shadow: 0 0 0 1px rgba(103, 232, 249, 0.12);
+}
+
+.btn-primary {
+    border-color: #0891b2;
+}
+
+.btn-danger {
+    background: #3f1d26;
+    border-color: #7f1d2d;
+    color: #fee2e2;
+    border-radius: 6px;
+    box-shadow: none;
+}
+
+.btn-danger:hover,
+.btn-danger:active,
+.btn-danger:focus {
+    background: #5c202c;
+    border-color: #be123c;
+    color: #ffffff;
+}
+
+.btn-link {
+    color: #a5f3fc;
+}
+
+.btn-link:hover,
+.btn-link:focus {
+    color: #ecfeff;
+}
+
+.btn.disabled,
+.btn[disabled] {
+    background: #111827;
+    border-color: #374151;
+    color: #6b7280;
+    opacity: 1;
 }

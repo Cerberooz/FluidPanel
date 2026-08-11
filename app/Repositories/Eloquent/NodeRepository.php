@@ -23,7 +23,7 @@ class NodeRepository extends EloquentRepository implements NodeRepositoryInterfa
     {
         $stats = $this->getBuilder()
             ->selectRaw('IFNULL(SUM(servers.memory), 0) as sum_memory, IFNULL(SUM(servers.disk), 0) as sum_disk')
-            ->join('servers', 'servers.node_id', '=', 'nodes.id')
+            ->leftJoin('servers', 'servers.node_id', '=', 'nodes.id')
             ->where('node_id', '=', $node->id)
             ->first();
 
@@ -55,7 +55,7 @@ class NodeRepository extends EloquentRepository implements NodeRepositoryInterfa
     {
         $stats = $this->getBuilder()->select(
             $this->getBuilder()->raw('IFNULL(SUM(servers.memory), 0) as sum_memory, IFNULL(SUM(servers.disk), 0) as sum_disk')
-        )->join('servers', 'servers.node_id', '=', 'nodes.id')->where('node_id', $node->id)->first();
+        )->leftJoin('servers', 'servers.node_id', '=', 'nodes.id')->where('node_id', $node->id)->first();
 
         return collect(['disk' => $stats->sum_disk, 'memory' => $stats->sum_memory])->mapWithKeys(function ($value, $key) use ($node) {
             $maxUsage = $node->{$key};
@@ -98,11 +98,20 @@ class NodeRepository extends EloquentRepository implements NodeRepositoryInterfa
      */
     public function loadNodeAllocations(Node $node, bool $refresh = false): Node
     {
+        $allocations = $node->allocations()
+            ->orderByRaw('server_id IS NOT NULL DESC, server_id IS NULL');
+
+        // SQLite does not implement MySQL's INET_ATON() helper. A lexical sort is
+        // sufficient here and keeps the allocation page usable on SQLite installs.
+        if ($node->getConnection()->getDriverName() === 'sqlite') {
+            $allocations->orderBy('ip');
+        } else {
+            $allocations->orderByRaw('INET_ATON(ip) ASC');
+        }
+
         $node->setRelation(
             'allocations',
-            $node->allocations()
-                ->orderByRaw('server_id IS NOT NULL DESC, server_id IS NULL')
-                ->orderByRaw('INET_ATON(ip) ASC')
+            $allocations
                 ->orderBy('port')
                 ->with('server:id,name')
                 ->paginate(50)

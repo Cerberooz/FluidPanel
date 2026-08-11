@@ -71,12 +71,17 @@ class NodeViewController extends Controller
 
         $this->plainInject(['node' => Collection::make([$node])->only(['id'])]);
 
+        $allocationIps = Allocation::query()->where('node_id', $node->id)->groupBy('ip');
+
+        if ($node->getConnection()->getDriverName() === 'sqlite') {
+            $allocationIps->orderBy('ip');
+        } else {
+            $allocationIps->orderByRaw('INET_ATON(ip) ASC');
+        }
+
         return view('admin.nodes.view.allocation', [
             'node' => $node,
-            'allocations' => Allocation::query()->where('node_id', $node->id)
-                ->groupBy('ip')
-                ->orderByRaw('INET_ATON(ip) ASC')
-                ->get(['ip']),
+            'allocations' => $allocationIps->get(['ip']),
         ]);
     }
 
