@@ -8,7 +8,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Pterodactyl\Repositories\Repository;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Query\Expression;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Pterodactyl\Contracts\Repository\RepositoryInterface;
@@ -254,26 +253,9 @@ abstract class EloquentRepository extends Repository implements RepositoryInterf
             return true;
         }
 
-        foreach ($values as $key => $value) {
-            ksort($value);
-            $values[$key] = $value;
-        }
-
-        $bindings = array_values(array_filter(array_flatten($values, 1), function ($binding) {
-            return !$binding instanceof Expression;
-        }));
-
-        $grammar = $this->getBuilder()->toBase()->getGrammar();
-        $table = $grammar->wrapTable($this->getModel()->getTable());
-        $columns = $grammar->columnize(array_keys(reset($values)));
-
-        $parameters = collect($values)->map(function ($record) use ($grammar) {
-            return sprintf('(%s)', $grammar->parameterize($record));
-        })->implode(', ');
-
-        $statement = "insert ignore into $table ($columns) values $parameters";
-
-        return $this->getBuilder()->getConnection()->statement($statement, $bindings);
+        // Let Laravel's database grammar generate the correct syntax for the
+        // active connection (INSERT IGNORE on MySQL, INSERT OR IGNORE on SQLite).
+        return $this->getBuilder()->toBase()->insertOrIgnore($values) >= 0;
     }
 
     /**
