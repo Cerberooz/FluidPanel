@@ -48,7 +48,7 @@ const SidebarButton = styled.button`
 `;
 
 const SidebarShell = styled.aside<{ $collapsed: boolean; $mobileOpen: boolean }>`
-    ${tw`fixed inset-y-0 left-0 z-40 flex border-r border-neutral-600 bg-neutral-900 shadow-2xl backdrop-blur lg:translate-x-0`};
+    ${tw`fixed inset-y-0 left-0 z-40 flex overflow-hidden border-r border-neutral-600 bg-neutral-900 shadow-2xl backdrop-blur lg:translate-x-0`};
     width: ${({ $collapsed }) => ($collapsed ? '5rem' : '18rem')};
     transform: translateX(${({ $mobileOpen }) => ($mobileOpen ? '0' : '-100%')});
     transition: width 200ms ease, transform 200ms ease;
@@ -172,20 +172,20 @@ export default ({ sidebar = false }: Props) => {
             <SidebarShell $collapsed={navCollapsed} $mobileOpen={mobileOpen}>
                 <div className={'flex w-full flex-col p-4'}>
                     <div className={'flex items-center justify-between'}>
-                        <Link
-                            to={'/'}
-                            onClick={() => setMobileOpen(false)}
-                            className={`inline-flex items-center overflow-hidden text-xl font-header font-semibold no-underline text-neutral-100 transition-all duration-200 ${
-                                navCollapsed ? 'gap-0' : 'gap-3'
-                            }`}
-                        >
-                            <img
-                                src={'/favicons/flux_logo.jpg'}
-                                alt={'Fluid'}
-                                className={'h-10 w-10 shrink-0 rounded-xl border border-neutral-600 object-cover'}
-                            />
-                            <Label $collapsed={navCollapsed}>{name}</Label>
-                        </Link>
+                        {!navCollapsed && (
+                            <Link
+                                to={'/'}
+                                onClick={() => setMobileOpen(false)}
+                                className={'inline-flex items-center gap-3 overflow-hidden text-xl font-header font-semibold no-underline text-neutral-100 transition-all duration-200'}
+                            >
+                                <img
+                                    src={'/favicons/flux_logo.jpg'}
+                                    alt={'Fluid'}
+                                    className={'h-10 w-10 shrink-0 rounded-xl border border-neutral-600 object-cover'}
+                                />
+                                <Label $collapsed={navCollapsed}>{name}</Label>
+                            </Link>
+                        )}
                         <div className={'flex items-center gap-2'}>
                             <div className={'hidden lg:block'}>
                                 <SidebarButton type={'button'} onClick={() => setCollapsed((value) => !value)}>
