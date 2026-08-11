@@ -408,8 +408,8 @@ footer {
 
 .capacity-ticks {
     display: flex;
-    gap: 3px;
-    height: 22px;
+    gap: 2px;
+    height: 14px;
 }
 
 .capacity-tick {
@@ -421,9 +421,3 @@ footer {
 .capacity-tick.is-filled { background: var(--bar-up); }
 .capacity-ticks.capacity-medium .capacity-tick.is-filled { background: var(--bar-degraded); }
 .capacity-ticks.capacity-low .capacity-tick.is-filled { background: var(--bar-down); }
-
-.capacity-row p {
-    color: var(--text-muted);
-    font-size: 0.72rem;
-    margin-top: 0.3rem;
-}

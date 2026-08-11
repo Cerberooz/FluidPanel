@@ -97,20 +97,17 @@
                                 <div class="capacity-label">
                                     <span>Availability</span>
                                     {% if node.memory.known %}
-                                    <strong>{{ '%.2f'|format(node.memory.free_percent) }}% free</strong>
+                                    <strong>{{ '%.2f'|format(node.memory.free_percent) }}%</strong>
                                     {% else %}
                                     <strong>Unavailable</strong>
                                     {% endif %}
                                 </div>
                                 <div class="capacity-ticks {{ 'capacity-low' if node.memory.free_percent < 20 else 'capacity-medium' if node.memory.free_percent < 40 else '' }}" aria-hidden="true">
-                                    {% set filled_ticks = ((node.memory.free_percent / 100) * 24)|round(0, 'floor')|int %}
-                                    {% for tick in range(24) %}
+                                    {% set filled_ticks = ((node.memory.free_percent / 100) * 60)|round(0, 'floor')|int %}
+                                    {% for tick in range(60) %}
                                     <span class="capacity-tick{% if tick < filled_ticks %} is-filled{% endif %}"></span>
                                     {% endfor %}
                                 </div>
-                                {% if node.memory.known %}
-                                <p>{{ '{:,.0f}'.format(node.memory.used) }} / {{ '{:,.0f}'.format(node.memory.total) }} MB used</p>
-                                {% endif %}
                             </div>
                         </div>
                     </div>
