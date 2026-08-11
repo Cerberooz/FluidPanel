@@ -43,6 +43,10 @@ const inputStyle = css<Props>`
     ${tw`p-3 border rounded-md text-sm transition-all duration-150`};
     ${tw`bg-neutral-900 border-neutral-600 hover:border-neutral-500 text-neutral-200 shadow-none focus:ring-0`};
 
+    &::placeholder {
+        ${tw`text-neutral-500 opacity-100`};
+    }
+
     & + .input-help {
         ${tw`mt-1 text-xs`};
         ${(props) => (props.hasError ? tw`text-red-200` : tw`text-neutral-200`)};

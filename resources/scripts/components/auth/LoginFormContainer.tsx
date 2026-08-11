@@ -31,6 +31,35 @@ const Container = styled.div`
     `};
 `;
 
+const FormCard = styled.div`
+    ${tw`w-full bg-neutral-800 border border-neutral-600 shadow-lg rounded-xl p-6 mx-1`};
+
+    label {
+        color: #cbd5e1 !important;
+    }
+
+    input:not([type='checkbox']):not([type='radio']) {
+        background: #141923 !important;
+        border-color: #374151 !important;
+        color: #f3f4f6 !important;
+        box-shadow: none !important;
+    }
+
+    input:not([type='checkbox']):not([type='radio']):hover {
+        border-color: #4b5563 !important;
+    }
+
+    input:not([type='checkbox']):not([type='radio']):focus {
+        border-color: #0891b2 !important;
+        box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.16) !important;
+    }
+
+    input::placeholder {
+        color: #7d899a !important;
+        opacity: 1 !important;
+    }
+`;
+
 export default forwardRef<HTMLFormElement, Props>(({ title, subtitle = 'Sign in to manage your servers.', ...props }, ref) => (
     <Container>
         <div css={tw`text-center mb-6`}>
@@ -44,9 +73,7 @@ export default forwardRef<HTMLFormElement, Props>(({ title, subtitle = 'Sign in 
         </div>
         <FlashMessageRender css={tw`mb-3 px-1`} />
         <Form {...props} ref={ref}>
-            <div css={tw`w-full bg-neutral-800 border border-neutral-600 shadow-lg rounded-xl p-6 mx-1`}>
-                {props.children}
-            </div>
+            <FormCard>{props.children}</FormCard>
         </Form>
         <p css={tw`text-center text-neutral-500 text-xs mt-4`}>
             Fluid Panel &copy; {new Date().getFullYear()}
