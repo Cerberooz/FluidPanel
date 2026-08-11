@@ -31,8 +31,8 @@ or delete those folders during this migration.
 
 3. Update the host Nginx configuration. Keep its existing TLS certificates,
    but replace the panel `root` / PHP locations with a proxy to
-   `http://127.0.0.1:8080`. Add a second host for
-   `status.fluxservers.cloud` that proxies to `http://127.0.0.1:8081`.
+   `http://127.0.0.1:18080`. Add a second host for
+   `status.fluxservers.cloud` that proxies to `http://127.0.0.1:18081`.
 
    Both DNS names must point to the same VPS IP. The existing `panel` record
    stays unchanged; add a `status` A record for that same IP.
